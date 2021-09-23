@@ -1,0 +1,142 @@
+CREATE TABLE TIPO_MOV (
+  id_tipo INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_tipo));
+
+
+
+
+CREATE TABLE TIPO_DOC (
+  id_doc INTEGER   NOT NULL ,
+  nombre_documento VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_doc));
+
+
+
+
+CREATE TABLE USUARIO (
+  idUSUARIO INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL ,
+  contraseña VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(idUSUARIO));
+
+
+
+
+CREATE TABLE CATEGORIA (
+  id_categoria INTEGER   NOT NULL ,
+  nomb_categoria VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_categoria));
+
+
+
+
+CREATE TABLE CONDICION (
+  id_condicion INTEGER   NOT NULL ,
+  nomb_cond VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_condicion));
+
+
+
+
+CREATE TABLE PRODUCTO (
+  codigo INTEGER   NOT NULL ,
+  CATEGORIA_id_categoria INTEGER   NOT NULL ,
+  referencia VARCHAR(45)   NOT NULL ,
+  stock INTEGER   NOT NULL ,
+  precio INTEGER   NOT NULL   ,
+PRIMARY KEY(codigo)  ,
+  FOREIGN KEY(CATEGORIA_id_categoria)
+    REFERENCES CATEGORIA(id_categoria));
+
+
+CREATE INDEX PRODUCTO_FKIndex1 ON PRODUCTO (CATEGORIA_id_categoria);
+
+
+CREATE INDEX IFK_Rel_07 ON PRODUCTO (CATEGORIA_id_categoria);
+
+
+CREATE TABLE PERSONAS (
+  documento INTEGER   NOT NULL ,
+  TIPO_DOC_id_doc INTEGER   NOT NULL ,
+  CONDICION_id_condicion INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL ,
+  apellido VARCHAR(45)   NOT NULL ,
+  correo  VARCHAR(45)   NOT NULL ,
+  direccion VARCHAR(45)   NOT NULL ,
+  telefono INTEGER   NOT NULL   ,
+PRIMARY KEY(documento)    ,
+  FOREIGN KEY(CONDICION_id_condicion)
+    REFERENCES CONDICION(id_condicion),
+  FOREIGN KEY(TIPO_DOC_id_doc)
+    REFERENCES TIPO_DOC(id_doc));
+
+
+CREATE INDEX PERSONAS_FKIndex3 ON PERSONAS (CONDICION_id_condicion);
+CREATE INDEX PERSONAS_FKIndex2 ON PERSONAS (TIPO_DOC_id_doc);
+
+
+CREATE INDEX IFK_Rel_07 ON PERSONAS (CONDICION_id_condicion);
+CREATE INDEX IFK_Rel_08 ON PERSONAS (TIPO_DOC_id_doc);
+
+
+CREATE TABLE MOVIMIENTO (
+  id_movimiento INTEGER   NOT NULL ,
+  PRODUCTO_codigo INTEGER   NOT NULL ,
+  PERSONAS_documento INTEGER   NOT NULL ,
+  USUARIO_idUSUARIO INTEGER   NOT NULL ,
+  TIPO_MOV_id_tipo INTEGER   NOT NULL ,
+  fecha DATE   NOT NULL ,
+  hora DATETIME   NOT NULL ,
+  cantidad INTEGER   NOT NULL   ,
+PRIMARY KEY(id_movimiento)        ,
+  FOREIGN KEY(TIPO_MOV_id_tipo)
+    REFERENCES TIPO_MOV(id_tipo),
+  FOREIGN KEY(USUARIO_idUSUARIO)
+    REFERENCES USUARIO(idUSUARIO),
+  FOREIGN KEY(PERSONAS_documento)
+    REFERENCES PERSONAS(documento),
+  FOREIGN KEY(PRODUCTO_codigo)
+    REFERENCES PRODUCTO(codigo));
+
+
+CREATE INDEX MOVIMIENTO_FKIndex1 ON MOVIMIENTO (TIPO_MOV_id_tipo);
+CREATE INDEX MOVIMIENTO_FKIndex2 ON MOVIMIENTO (USUARIO_idUSUARIO);
+CREATE INDEX MOVIMIENTO_FKIndex3 ON MOVIMIENTO (PERSONAS_documento);
+CREATE INDEX MOVIMIENTO_FKIndex4 ON MOVIMIENTO (PRODUCTO_codigo);
+
+
+CREATE INDEX IFK_Rel_10 ON MOVIMIENTO (TIPO_MOV_id_tipo);
+CREATE INDEX IFK_Rel_11 ON MOVIMIENTO (USUARIO_idUSUARIO);
+CREATE INDEX IFK_Rel_12 ON MOVIMIENTO (PERSONAS_documento);
+CREATE INDEX IFK_Rel_08 ON MOVIMIENTO (PRODUCTO_codigo);
+
+
+INSERT INTO `producto` (`codigo`, `CATEGORIA_id_categoria`, `referencia`, `stock`, `precio`) VALUES ('2201', '222', 'blusa negra', '15', '45000'), ('2202', '222', 'blusa blanca', '16', '40000'), ('3208', '111', 'camisa cuello', '18', '35000'), ('3207', '111', 'camiseta gris', '25', '42000'), ('4209', '444', 'sudadera gris', '40', '25000'), ('3206', '111', 'buso capucha', '40', '55000'), ('2209', '222', 'falda cuadros', '30', '55000'), ('2210', '222', 'blusa estampada', '45', '40000'), ('3259', '111', 'jeans azules', '26', '30000'), ('3297', '111', 'jeans negros', '15', '42000'), ('5501', '333', 'buso osos', '32', '45000'), ('4202', '444', 'gorro estampado', '32', '250000'), ('5502', '333', 'camisa estampada', '56', '46000'), ('2211', '222', 'jeans rotos\'', '26', '45500'), ('3308', '111', 'esqueleto', '20', '220000'), ('4211', '444', 'tapabocas 3D', '50', '3500'), ('2218', '222', 'vestido dos piezas', '20', '60000'), ('3265', '111', 'chaqueta cuero', '25', '65000'), ('2220', '222', 'chaqueta colores', '24', '56000'), ('2321', '222', 'pantalón semiformal', '15', '45000');
+UPDATE `condicion` SET `id_condicion` = '1254' WHERE `condicion`.`id_condicion` = 1256;
+INSERT INTO `usuario` (`idUSUARIO`, `nombre`, `contraseña`) VALUES ('2464', 'David', '123456789'), ('2465', 'Sebastian', '100254858'), ('2466', 'Danna', '12458767'), ('2467', 'Paula', '145558720'), ('2468', 'Daniel', '1458563');
+
+INSERT INTO `condicion` (`id_condicion`, `nomb_cond`) VALUES ('1256', 'cliente'), ('1257', 'proveedor');
+
+
+
+NSERT INTO `movimiento` (`id_movimiento`, `PRODUCTO_codigo`, `PERSONAS_documento`, `USUARIO_idUSUARIO`, `TIPO_MOV_id_tipo`, `fecha`, `hora`, `cantidad`) VALUES ('001', '2202', '1013', '2466', '248', '2021-09-03', '2021-09-03 14:08:10.000000', '16');
+INSERT INTO `categoria` (`id_categoria`, `nomb_categoria`) VALUES ('111', 'caballero'), ('222', 'dama'), ('333', 'niños'), ('444', 'unisex');
+INSERT INTO `movimiento` (`id_movimiento`, `PRODUCTO_codigo`, `PERSONAS_documento`, `USUARIO_idUSUARIO`, `TIPO_MOV_id_tipo`, `fecha`, `hora`, `cantidad`) VALUES ('002', '4202', '2025', '2464', '147', '2021-08-04', '2021-08-04 15:10:56.000000', '25');
+INSERT INTO `movimiento` (`id_movimiento`, `PRODUCTO_codigo`, `PERSONAS_documento`, `USUARIO_idUSUARIO`, `TIPO_MOV_id_tipo`, `fecha`, `hora`, `cantidad`) VALUES ('003', '2209', '1011', '2468', '248', '2021-09-08', '2021-09-08 13:12:04.000000', '2'), ('004', '3265', '1013', '2466', '248', '2021-07-30', '2021-07-30 14:12:04.000000', '1'), ('005', '4209', '1015', '2466', '248', '2021-09-09', '2021-09-09 08:12:04.000000', '2'), ('006', '3208', '2022', '2464', '147', '2021-09-01', '2021-09-01 12:12:04.000000', '25'), ('007', '3206', '1010', '2465', '248', '2021-09-03', '2021-09-03 14:12:04.000000', '2'), ('008', '2211', '2029', '2467', '147', '2021-09-29', '2021-09-22 14:12:04.000000', '15');
+
+UPDATE `usuario` SET `rol` = 'administrador' WHERE `usuario`.`idUSUARIO` = 2464;
+UPDATE `usuario` SET `rol` = 'vendedor' WHERE `usuario`.`idUSUARIO` = 2468;
+
+
+SELECT `producto`.`referencia`, `personas`.`nombre`, `condicion`.`nomb_cond`, `movimiento`.`id_movimiento`, `tipo_mov`.`nombre`
+FROM `producto`
+	, `personas` 
+	LEFT JOIN `condicion` ON `personas`.`CONDICION_id_condicion` = `condicion`.`id_condicion` 
+	LEFT JOIN `movimiento` ON `movimiento`.`PERSONAS_documento` = `personas`.`documento` 
+	LEFT JOIN `tipo_mov` ON `movimiento`.`TIPO_MOV_id_tipo` = `tipo_mov`.`id_tipo`;
+SELECT `producto`.`referencia`, `personas`.`nombre`, `tipo_mov`.`nombre`, `movimiento`.`cantidad`, `producto`.`precio`
+FROM `producto`
+	, `personas`
+	, `tipo_mov` 
+	LEFT JOIN `movimiento` ON `movimiento`.`TIPO_MOV_id_tipo` = `tipo_mov`.`id_tipo`;

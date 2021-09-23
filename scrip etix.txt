@@ -1,0 +1,121 @@
+CREATE TABLE TIPO_DOC (
+  id_doc INTEGER   NOT NULL ,
+  nombre_documento INTEGER   NOT NULL   ,
+PRIMARY KEY(id_doc));
+
+
+
+
+CREATE TABLE TIPO_MOV (
+  id_tipo INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_tipo));
+
+
+
+
+CREATE TABLE USUARIO (
+  idUSUARIO INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL ,
+  contraseña VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(idUSUARIO));
+
+
+
+
+CREATE TABLE PRODUCTO (
+  codigo INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL ,
+  stock INTEGER   NOT NULL ,
+  categoria VARCHAR(45)   NOT NULL ,
+  precio INTEGER   NOT NULL   ,
+PRIMARY KEY(codigo));
+
+
+
+
+CREATE TABLE CONDICION (
+  id_condicion INTEGER   NOT NULL ,
+  nomb_cond VARCHAR(45)   NOT NULL   ,
+PRIMARY KEY(id_condicion));
+
+
+
+
+CREATE TABLE PERSONAS (
+  documento INTEGER   NOT NULL ,
+  TIPO_DOC_id_doc INTEGER   NOT NULL ,
+  CONDICION_id_condicion INTEGER   NOT NULL ,
+  nombre VARCHAR(45)   NOT NULL ,
+  apellido VARCHAR(45)   NOT NULL ,
+  correo  VARCHAR(45)   NOT NULL ,
+  direccion VARCHAR(45)   NOT NULL ,
+  telefono INTEGER   NOT NULL   ,
+PRIMARY KEY(documento, TIPO_DOC_id_doc, CONDICION_id_condicion)    ,
+  FOREIGN KEY(TIPO_DOC_id_doc)
+    REFERENCES TIPO_DOC(id_doc),
+  FOREIGN KEY(CONDICION_id_condicion)
+    REFERENCES CONDICION(id_condicion));
+
+
+CREATE INDEX PERSONAS_FKIndex1 ON PERSONAS (TIPO_DOC_id_doc);
+CREATE INDEX PERSONAS_FKIndex2 ON PERSONAS (CONDICION_id_condicion);
+
+
+CREATE INDEX IFK_Rel_01 ON PERSONAS (TIPO_DOC_id_doc);
+CREATE INDEX IFK_Rel_02 ON PERSONAS (CONDICION_id_condicion);
+
+
+CREATE TABLE MOVIMIENTO (
+  id_movimiento INTEGER   NOT NULL ,
+  USUARIO_idUSUARIO INTEGER   NOT NULL ,
+  TIPO_MOV_id_tipo INTEGER   NOT NULL ,
+  PRODUCTO_codigo INTEGER   NOT NULL ,
+  PERSONAS_CONDICION_id_condicion INTEGER   NOT NULL ,
+  PERSONAS_TIPO_DOC_id_doc INTEGER   NOT NULL ,
+  PERSONAS_documento INTEGER   NOT NULL ,
+  fecha DATE   NOT NULL ,
+  hora DATETIME   NOT NULL ,
+  cantidad INTEGER   NOT NULL   ,
+PRIMARY KEY(id_movimiento, USUARIO_idUSUARIO, TIPO_MOV_id_tipo, PRODUCTO_codigo, PERSONAS_CONDICION_id_condicion, PERSONAS_TIPO_DOC_id_doc, PERSONAS_documento)        ,
+  FOREIGN KEY(USUARIO_idUSUARIO)
+    REFERENCES USUARIO(idUSUARIO),
+  FOREIGN KEY(TIPO_MOV_id_tipo)
+    REFERENCES TIPO_MOV(id_tipo),
+  FOREIGN KEY(PRODUCTO_codigo)
+    REFERENCES PRODUCTO(codigo),
+  FOREIGN KEY(PERSONAS_documento, PERSONAS_TIPO_DOC_id_doc, PERSONAS_CONDICION_id_condicion)
+    REFERENCES PERSONAS(documento, TIPO_DOC_id_doc, CONDICION_id_condicion));
+
+
+CREATE INDEX MOVIMIENTO_FKIndex1 ON MOVIMIENTO (USUARIO_idUSUARIO);
+CREATE INDEX MOVIMIENTO_FKIndex2 ON MOVIMIENTO (TIPO_MOV_id_tipo);
+CREATE INDEX MOVIMIENTO_FKIndex3 ON MOVIMIENTO (PRODUCTO_codigo);
+CREATE INDEX MOVIMIENTO_FKIndex4 ON MOVIMIENTO (PERSONAS_documento, PERSONAS_TIPO_DOC_id_doc, PERSONAS_CONDICION_id_condicion);
+
+
+CREATE INDEX IFK_Rel_03 ON MOVIMIENTO (USUARIO_idUSUARIO);
+CREATE INDEX IFK_Rel_04 ON MOVIMIENTO (TIPO_MOV_id_tipo);
+CREATE INDEX IFK_Rel_05 ON MOVIMIENTO (PRODUCTO_codigo);
+CREATE INDEX IFK_Rel_06 ON MOVIMIENTO (PERSONAS_documento, PERSONAS_TIPO_DOC_id_doc, PERSONAS_CONDICION_id_condicion);
+
+
+
+INSERT INTO `condicion` (`id_condicion`, `nomb_cond`) VALUES ('1256', 'cliente'), ('1257', 'proveedor');
+
+UPDATE `condicion` SET `id_condicion` = '1254' WHERE `condicion`.`id_condicion` = 1256;
+
+INSERT INTO `usuario` (`idUSUARIO`, `nombre`, `contraseña`) VALUES ('2464', 'David', '123456789'), ('2465', 'Sebastian', '100254858'), ('2466', 'Danna', '12458767'), ('2467', 'Paula', '145558720'), ('2468', 'Daniel', '1458563');
+
+
+INSERT INTO `tipo_doc` (`id_doc`, `nomb_doc`) VALUES ('01', 'cedula ciudadania'), ('02', 'tarjeta identidad'), ('03', 'cedula extranjeria'), ('04', 'Registro civil');
+
+INSERT INTO `tipo_mov` (`id_tipo`, `nombre`) VALUES ('147', 'compra'), ('248', 'venta');
+INSERT INTO `producto` (`codigo`, `nombre`, `stock`,`precio`) VALUES ('2201', 'blusa negra', '15','45000'), ('2202', 'blusa blanca', '14', '40000'), ('3208', 'camisa cuello', '10', '35000'), ('3207', 'camiseta gris', '16',  '42000'), ('4209', 'sudadera gris', '25', '25000'), ('3206', 'buso capucha', '46', '55000'), ('2209', 'falda cuadros', '35',  '48000'), ('2210', 'blusa estampada', '45', '25000'), ('3259', 'jeans', '46',  '55000'), ('5501', 'buso osos', '40',  '50000'), ('4202', 'gorro estampado', '56',  '20000'), ('5502', 'camisa estampada', '25',  '25000'), ('2211', 'jeans rotos', '56',  '45000'), ('2212', 'vestido cuadros', '50',  '65000'), ('3308', 'esqueleto', '25', '25000'), ('4211', 'tapabocas 3D', '45',  '3500'), ('2218', 'vestido dos piezas', '35',  '60000'), ('3265', 'chaqueta cuero', '25',  '85000'), ('2220', 'chaqueta colores', '35',  '62000'), ('2221', 'pantalon semiformal', '56',  '45500');
+
+
+INSERT INTO `personas` (`documento`, `TIPO_DOC_id_doc`, `CONDICION_id_condicion`, `nombre`, `apellido`, `correo`, `direccion`, `telefono`) VALUES ('1010', '1', '1254', 'Javier', 'Rodriguez', 'rod@gmail.com', 'calle45 sur', '7896548'), ('2020', '3', '1257', 'Sandra', 'Suarez', 'suaresand@outlook.com', 'carrera45 este', '2315145'), ('1011', '1', '1254', 'Paula', 'Valencia', 'pava76@hotmail.com', 'calle65 d este', '32278941'), ('2021', '1', '1257', 'Raul', 'Pérez', 'perezrau87@gmail.com', 'avenida76 A -78 sur', '4589789'), ('1013', '2', '1254', 'Daniel', 'Zuluaga', 'dan7654@hotmail.com', 'Cl 74 No. 2-403, ', '12491585'), ('2022', '1', '1257', 'Maria', 'Hernandez', 'mariita36@gmail.com', 'Cr 7 No. 743-243 ', '13218566'), ('1015', '1', '1254', 'Juan', 'Gonzales', 'Gonzojuanito@hotmail.com', 'Cl 84 No. 508-38', '16233645'), ('2025', '3', '1257', 'Camilo', 'Osorio', 'osriocam@gmail.com', 'Dg 44BSUR No. 20-67', '315631430'), ('1018', '1', '1254', 'Mariana', 'Sánchez', 'mariansan@hotmail.com', 'Cl 70A No. 5-66 APT 22022', '312499698'), ('2029', '1', '1257', 'Freddy', 'García', 'garcia45678@outlook.co', 'Cl 25 No. 38A-264 P 2', '315734810');
+
+
+SELECT `producto`.`referencia`, `personas`.`nombre`, `condicion`.`nomb_cond` FROM `producto` , `personas` LEFT JOIN `condicion` ON `personas`.`CONDICION_id_condicion` = `condicion`.`id_condicion`;
+
