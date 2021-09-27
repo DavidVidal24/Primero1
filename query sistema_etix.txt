@@ -1,3 +1,6 @@
+
+SENTENCIAS DDL
+
 CREATE TABLE TIPO_MOV (
   id_tipo INTEGER   NOT NULL ,
   nombre VARCHAR(45)   NOT NULL   ,
@@ -109,7 +112,15 @@ CREATE INDEX MOVIMIENTO_FKIndex4 ON MOVIMIENTO (PRODUCTO_codigo);
 CREATE INDEX IFK_Rel_10 ON MOVIMIENTO (TIPO_MOV_id_tipo);
 CREATE INDEX IFK_Rel_11 ON MOVIMIENTO (USUARIO_idUSUARIO);
 CREATE INDEX IFK_Rel_12 ON MOVIMIENTO (PERSONAS_documento);
-CREATE INDEX IFK_Rel_08 ON MOVIMIENTO (PRODUCTO_codigo);
+CREATE INDEX IFK_Rel_08 ON MOVIMIENTO (PRODUCTO_codigo
+
+
+
+ALTER TABLE `tipo_mov` CHANGE `id_tipo` `id_tipodoc` INT(11) NOT NULL;
+DROP TABLE ` registro `
+
+
+SENTENCIAS DML
 
 
 INSERT INTO `producto` (`codigo`, `CATEGORIA_id_categoria`, `referencia`, `stock`, `precio`) VALUES ('2201', '222', 'blusa negra', '15', '45000'), ('2202', '222', 'blusa blanca', '16', '40000'), ('3208', '111', 'camisa cuello', '18', '35000'), ('3207', '111', 'camiseta gris', '25', '42000'), ('4209', '444', 'sudadera gris', '40', '25000'), ('3206', '111', 'buso capucha', '40', '55000'), ('2209', '222', 'falda cuadros', '30', '55000'), ('2210', '222', 'blusa estampada', '45', '40000'), ('3259', '111', 'jeans azules', '26', '30000'), ('3297', '111', 'jeans negros', '15', '42000'), ('5501', '333', 'buso osos', '32', '45000'), ('4202', '444', 'gorro estampado', '32', '250000'), ('5502', '333', 'camisa estampada', '56', '46000'), ('2211', '222', 'jeans rotos\'', '26', '45500'), ('3308', '111', 'esqueleto', '20', '220000'), ('4211', '444', 'tapabocas 3D', '50', '3500'), ('2218', '222', 'vestido dos piezas', '20', '60000'), ('3265', '111', 'chaqueta cuero', '25', '65000'), ('2220', '222', 'chaqueta colores', '24', '56000'), ('2321', '222', 'pantalón semiformal', '15', '45000');
@@ -128,6 +139,11 @@ INSERT INTO `movimiento` (`id_movimiento`, `PRODUCTO_codigo`, `PERSONAS_document
 UPDATE `usuario` SET `rol` = 'administrador' WHERE `usuario`.`idUSUARIO` = 2464;
 UPDATE `usuario` SET `rol` = 'vendedor' WHERE `usuario`.`idUSUARIO` = 2468;
 
+DELETE FROM `producto` WHERE `producto`.`codigo` = 4211"
+UPDATE `producto` SET `precio` = '45500' WHERE `producto`.`codigo` = 5501;
+
+
+JOINS
 
 SELECT `producto`.`referencia`, `personas`.`nombre`, `condicion`.`nomb_cond`, `movimiento`.`id_movimiento`, `tipo_mov`.`nombre`
 FROM `producto`
@@ -135,8 +151,16 @@ FROM `producto`
 	LEFT JOIN `condicion` ON `personas`.`CONDICION_id_condicion` = `condicion`.`id_condicion` 
 	LEFT JOIN `movimiento` ON `movimiento`.`PERSONAS_documento` = `personas`.`documento` 
 	LEFT JOIN `tipo_mov` ON `movimiento`.`TIPO_MOV_id_tipo` = `tipo_mov`.`id_tipo`;
+
+
 SELECT `producto`.`referencia`, `personas`.`nombre`, `tipo_mov`.`nombre`, `movimiento`.`cantidad`, `producto`.`precio`
 FROM `producto`
 	, `personas`
 	, `tipo_mov` 
 	LEFT JOIN `movimiento` ON `movimiento`.`TIPO_MOV_id_tipo` = `tipo_mov`.`id_tipo`;
+
+
+
+
+
+
